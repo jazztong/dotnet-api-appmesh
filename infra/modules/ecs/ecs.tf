@@ -12,9 +12,9 @@ resource "aws_ecs_service" "this" {
     }
   }
 
-  task_definition = aws_ecs_task_definition.this.arn
-
-  desired_count = 1
+  task_definition  = aws_ecs_task_definition.this.arn
+  platform_version = "1.4.0"
+  desired_count    = 1
 
   network_configuration {
     subnets          = data.aws_subnet_ids.this.ids

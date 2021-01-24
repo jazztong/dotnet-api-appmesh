@@ -8,11 +8,17 @@ export PRODUCT_REPO=product_api
 export USER_REPO=user_api
 export ORDER_REPO=order_api
 
+export AWS_DEFAULT_PROFILE=default
 export AWS_DEFAULT_REGION=ap-southeast-1
-export ACCOUNT_NUMBER=$$(aws sts get-caller-identity --outpu  text --query 'Account')
+export ACCOUNT_NUMBER=$$(aws sts get-caller-identity --output  text --query 'Account')
 export ECR_URL=${ACCOUNT_NUMBER}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
 
 INFRA_PATH ?= infra
+
+# Setup AWS
+# 	configure aws credential
+#	brew install docker-credential-helper-ecr
+#	edit ~/.docker/config.json with {"credsStore": "ecr-login"}
 
 lab:
 	docker build -t ${LAB_NAME} .
@@ -30,14 +36,14 @@ login-lab:
 		${LAB_NAME}
 
 db-server:
-	docker run -it --rm \
+	docker run -d \
 	--name appmesh-mysql \
 	-p 3306:3306 \
 	-e MYSQL_ROOT_PASSWORD=mypassword \
 	mysql
 
 redis:
-	docker run -it --rm \
+	docker run -d \
 	--name appmesh-redis \
 	-p 6379:6379 \
 	redis
